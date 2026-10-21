@@ -62,26 +62,25 @@ pub fn sort_scores_desc(records: &mut Vec<ScoreRecord>) {
 // and a length that parses as a number from MIN_SHIP to MAX_SHIP.
 // Model it on parse_score above.
 pub fn parse_ship_line(line: &str) -> Option<ShipSpec> {
-     let ship: Option<ShipSpec> = line.trim().split(',').collect();
+    let ship: Vec<&str> = line.trim().split(',').collect();
     if ship.len() != 2 {
         return None;
     }
     let name = ship[0].trim();
     if name.is_empty() {
         return None;
-    }
-    match ship[1].trim().parse::<u32>() {
-        Ok(length) => Some(ShipSpec{
-	 name: name.to_string(),
-            length: length as usize,
-        }),
-	Err(_) => None,
-	};
-let length: u32 = ship[1];
+}
+let length: usize = ship[1].parse().unwrap();
 if length>MAX_SHIP||length<MIN_SHIP {
 return None;
 }
-return ship;
+    match ship[1].trim().parse::<usize>() {
+        Ok(length) => Some(ShipSpec {
+            name: name.to_string(),
+            length,
+        }),
+        Err(_) => None,
+}
 }
 
 // Task 2.
