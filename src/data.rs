@@ -1,7 +1,7 @@
 // Loading and saving game data.
 use crate::board::Board;
 use std::fs;
-
+use crate::board::{Cell,SIZE, new_board};
 pub const MIN_SHIP: usize = 2;
 pub const MAX_SHIP: usize = 5;
 
@@ -53,7 +53,7 @@ pub fn sort_scores_desc(records: &mut Vec<ScoreRecord>) {
 
 // ---------------------------------------------------------------------
 // TASKS: write the six functions below (README has the task order).
-// Each has a stub that compiles. Remove the todo!() as you implement.
+// Each has a stub that compiles.let mut valid_ships: Vec<ShipSpec>;
 // You will need to add `use` lines at the top as you go.
 // ---------------------------------------------------------------------
 
@@ -91,28 +91,28 @@ return None;
 //     Skipped N invalid line(s) in <path>
 // to stderr (eprintln!). If the file cannot be read, print the error to
 // stderr and return an empty Vec.
-pub fn load_fleet(path: &str) -> Vec<ShipSpec> {
-	let txt: Vec<&str>;
-	if match std::fs::read_to_string(path){
-		Ok(name) => Some(ShipSpec {
-			name,
-			length: length.to.usize(),
-		}),
-		Error(_) => None,
-	}
- 
-	for line in path.lines(){
-	txt = line.trim.split('#');
-	if txt[0].is_empty{
-	} else { 
-	txt = parse_ship_line(line)   
-	if 
-	}
-	if count > 0{
-	eprintln!("Skipped {} invalid line(s) in <path>",count)
-	}
+pub fn load_fleet(_path: &str) -> Vec<ShipSpec> {
+let mut valid_ships: Vec<ShipSpec>;
+match fs::read_to_string(path){
+        Ok(_) => {
+        }
+        Err(_) =>{
+        println!("There was an error retrieving your file");
+        return valid_ships.clear();
+        }
+};
+let mut count: i32 = 0;
+        for line in path.lines(){
+if lot.is_empty(){}
+                }if parse_ship_line(line)== None {
+                count += 1;
+                }else{
 
-	}
+
+        }if count > 0{
+        eprintln!("Skipped {} invalid line(s) in <path>",count);
+        }
+return ShipSpec;
 }
 // Task 3.
 // Turn the text of a board file into a Board (a 2D array). The text has SIZE
@@ -120,10 +120,36 @@ pub fn load_fleet(path: &str) -> Vec<ShipSpec> {
 // starting with '#' are ignored. Return None for too few rows, too many rows,
 // a row of the wrong width, or any other character.
 // Start from board::new_board() and fill in board[row][col].
-pub fn parse_board(_text: &str) -> Option<Board> {
-    todo!("Task 3: parse_board")
+pub fn parse_board(text: &str) -> Option<Board> {
+   let mut board = new_board();
+   let mut count_row: usize = 0;
+   let mut count_row_length: usize = 0;
+   let skipper: Vec<&str> = text.trim().split('#').collect();
+	for row in 0..SIZE{
+	if skipper.len() >=1 {
+	}else if skipper[0].is_empty(){
+	}else{
+		for col in 0..SIZE{ 
+		let cell_check = &board[count_row][count_row_length];
+		match cell_check{
+		Cell::Water => count_row_length += 1,
+		Cell::Ship => count_row_length += 1,
+		_ => return None,
+		};
+		count_row_length += 1;
+		}
+	count_row += 1;
+	}
+	}
+if count_row != 10{
+return None
+};
+if count_row_length != 10{
+return None
+}else{
+return Some(board)
 }
-
+}
 // Task 4.
 // Read the file at path and parse it with parse_board. On a read error, or if
 // parse_board returns None, print a message to stderr and return None.
