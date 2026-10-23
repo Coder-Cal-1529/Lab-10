@@ -1,4 +1,4 @@
-// Loading and saving game data.
+\// Loading and saving game data.
 use crate::board::Board;
 use std::fs;
 use crate::board::{Cell,SIZE, new_board};
@@ -83,14 +83,11 @@ return None;
         Err(_) => None,
 }
 }
-
 // Task 2.
 // Read path and return every valid ship. Blank lines and lines starting with
 // '#' are ignored silently. Any other line parse_ship_line rejects is counted;
-// if the count is above 0, print
-//     Skipped N invalid line(s) in <path>
-// to stderr (eprintln!). If the file cannot be read, print the error to
-// stderr and return an empty Vec.
+// if the count is above 0, print Skipped N invalid line(s) in <path>
+// to stderr (eprintln!). If the file cannot be read, print the error to stderr and return an empty Vec.
 pub fn load_fleet(_path: &str) -> Vec<ShipSpec> {
 let mut valid_ships: Vec<ShipSpec>;
 match fs::read_to_string(path){
@@ -98,13 +95,13 @@ match fs::read_to_string(path){
         }
         Err(_) =>{
         println!("There was an error retrieving your file");
-        return valid_ships.clear();
+       return Some();
         }
 };
 let mut count: i32 = 0;
         for line in path.lines(){
 if lot.is_empty(){}
-                }if parse_ship_line(line)== None {
+               }if parse_ship_line(line)== None {
                 count += 1;
                 }else{
 
@@ -112,43 +109,41 @@ if lot.is_empty(){}
         }if count > 0{
         eprintln!("Skipped {} invalid line(s) in <path>",count);
         }
-return ShipSpec;
-}
+return Some(ShipSpec);}
+      
 // Task 3.
-// Turn the text of a board file into a Board (a 2D array). The text has SIZE
-// rows of SIZE characters: '.' is water, 'S' is a ship. Blank lines and lines
+// Turn the text of a board file into a Board (a 2D array). The text has SI// rows of SIZE characters: '.' is water, 'S' is a ship. Blank lines and lines
 // starting with '#' are ignored. Return None for too few rows, too many rows,
 // a row of the wrong width, or any other character.
 // Start from board::new_board() and fill in board[row][col].
 pub fn parse_board(text: &str) -> Option<Board> {
    let mut board = new_board();
-   let mut count_row: usize = 0;
-   let mut count_row_length: usize = 0;
-   let skipper: Vec<&str> = text.trim().split('#').collect();
-	for row in 0..SIZE{
-	if skipper.len() >=1 {
-	}else if skipper[0].is_empty(){
-	}else{
-		for col in 0..SIZE{ 
-		let cell_check = &board[count_row][count_row_length];
-		match cell_check{
-		Cell::Water => count_row_length += 1,
-		Cell::Ship => count_row_length += 1,
-		_ => return None,
-		};
-		count_row_length += 1;
+	let mut row_count: usize =0;
+	for row in text.lines(){
+		let line = row.trim();
+		if line.is_empty()||line.starts_with('#'){
+			continue;
 		}
-	count_row += 1;
+		if row_count >= SIZE{
+			return None;
+		}
+		if line.chars().count() != SIZE{
+			return None
+		}
+		for (col,ch) in line.chars().enumerate(){ 		
+		match ch{
+		'.' => board[row_count][col] = Cell::Water,
+		'S' => board[row_count][col] = Cell::Ship,
+		_ => return None,
+		}		
+		}
+	
+	row_count +=1;
 	}
+	if row_count != SIZE{
+	return None;
 	}
-if count_row != 10{
-return None
-};
-if count_row_length != 10{
-return None
-}else{
-return Some(board)
-}
+Some(board)
 }
 // Task 4.
 // Read the file at path and parse it with parse_board. On a read error, or if
