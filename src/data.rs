@@ -1,4 +1,4 @@
-\// Loading and saving game data.
+// Loading and saving game data.
 use crate::board::Board;
 use std::fs;
 use crate::board::{Cell,SIZE, new_board};
@@ -71,7 +71,7 @@ pub fn parse_ship_line(line: &str) -> Option<ShipSpec> {
     if name.is_empty() {
         return None;
 }
-let length: usize = ship[1].parse().unwrap();
+let length: usize = ship[1].trim().parse().unwrap();
 if length>MAX_SHIP||length<MIN_SHIP {
 return None;
 }
@@ -88,29 +88,29 @@ return None;
 // '#' are ignored silently. Any other line parse_ship_line rejects is counted;
 // if the count is above 0, print Skipped N invalid line(s) in <path>
 // to stderr (eprintln!). If the file cannot be read, print the error to stderr and return an empty Vec.
-pub fn load_fleet(_path: &str) -> Vec<ShipSpec> {
-let mut valid_ships: Vec<ShipSpec>;
-match fs::read_to_string(path){
-        Ok(_) => {
-        }
-        Err(_) =>{
-        println!("There was an error retrieving your file");
-       return Some();
-        }
-};
-let mut count: i32 = 0;
-        for line in path.lines(){
-if lot.is_empty(){}
-               }if parse_ship_line(line)== None {
-                count += 1;
-                }else{
+ //pub fn load_fleet(_path: &str) -> Vec<ShipSpec> {
+//let mut valid_ships: Vec<ShipSpec>;
+//match fs::read_to_string(path){
+  //      Ok(_) => {
+  //      }
+  //     Err(_) =>{
+   //     println!("There was an error retrieving your file");
+    //   return Some();
+      //  }
+//};
+//let mut count: i32 = 0;
+  //      for line in path.lines(){
+//if lot.is_empty(){}
+  //             }if parse_ship_line(line)== None {
+   //             count += 1;
+     //           }else{
 
 
-        }if count > 0{
-        eprintln!("Skipped {} invalid line(s) in <path>",count);
-        }
-return Some(ShipSpec);}
-      
+       // }if count > 0{
+        //eprintln!("Skipped {} invalid line(s) in <path>",count);
+        //}
+//return Some(ShipSpec);}
+     
 // Task 3.
 // Turn the text of a board file into a Board (a 2D array). The text has SI// rows of SIZE characters: '.' is water, 'S' is a ship. Blank lines and lines
 // starting with '#' are ignored. Return None for too few rows, too many rows,
