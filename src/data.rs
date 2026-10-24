@@ -2,6 +2,8 @@
 use crate::board::Board;
 use std::fs;
 use crate::board::{Cell,SIZE, new_board};
+use std::io::Write;
+use std::fs::OpenOptions;
 pub const MIN_SHIP: usize = 2;
 pub const MAX_SHIP: usize = 5;
 
@@ -178,9 +180,25 @@ pub fn load_board(path: &str) -> Option<Board> {
 // Replace commas in the name with spaces so the line stays parseable.
 // Return true if the write succeeded; on failure print the error to stderr
 // and return false.
-//pub fn append_score(path: &str, record: &ScoreRecord) -> bool {
-   
-//}
+pub fn append_score(path: &str, record: &ScoreRecord) -> bool {
+   let name_clear = record.name.replace(','," ");
+let name_score = OpenOptions::new()
+	.create(true)
+	.append(true)
+	.open(path);
+let mut score_file = match name_score{
+Ok(file) => file,
+Err(error) => {
+eprintln!("Failed to open file due to Error: {}", error);
+return false;
+}
+};
+if let Err(error) = writeln!(score_file, "{},{}", name_clear, record.score){
+eprintln!("Failed to write to file due to error: {}", error);
+return false;
+}
+return true;
+}
 
 // Task 7.
 // Read every valid score line from path. A missing file is normal on the
@@ -190,7 +208,7 @@ pub fn load_scores(path: &str) -> Vec<ScoreRecord> {
  let mut scores = Vec::new();
         let score_board = match fs::read_to_string(path){
                 Ok(score_board) => score_board,
-                Err(err) =>{
+                Err(_) =>{
                         return vec![]
                 }
         };
