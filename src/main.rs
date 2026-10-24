@@ -5,13 +5,11 @@ use rand::SeedableRng;
 use rand::rngs::StdRng;
 
 const FLEET_PATH: &str = "data/fleet.txt";
-// TODO (Task 6): add SCORES_PATH ("data/scores.txt").
-// TODO (Task 8): add PRACTICE_PATH ("data/boards/practice.txt").
+const SCORES_PATH: &str ="data/scores.txt";
+const PRACTICE_PATH: &str = ("data/boards/practice.txt")
 const TOP_N: usize = 5;
 
 fn main() {
-    // TODO (Task 5): replace default_fleet() with data::load_fleet(FLEET_PATH),
-    // then delete default_fleet from data.rs.
     let fleet = data::load_fleet(FLEET_PATH);
     if fleet.is_empty() {
         println!("No fleet loaded. Check {FLEET_PATH}.");
