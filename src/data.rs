@@ -178,15 +178,31 @@ pub fn load_board(path: &str) -> Option<Board> {
 // Replace commas in the name with spaces so the line stays parseable.
 // Return true if the write succeeded; on failure print the error to stderr
 // and return false.
-pub fn append_score(_path: &str, _record: &ScoreRecord) -> bool {
-    todo!("Task 6: append_score")
-}
+//pub fn append_score(path: &str, record: &ScoreRecord) -> bool {
+   
+//}
 
 // Task 7.
 // Read every valid score line from path. A missing file is normal on the
 // first run: return an empty Vec and print nothing. Skip lines that
 // parse_score rejects.
-pub fn load_scores(_path: &str) -> Vec<ScoreRecord> {
-    todo!("Task 7: load_scores")
+pub fn load_scores(path: &str) -> Vec<ScoreRecord> {
+ let mut scores = Vec::new();
+        let score_board = match fs::read_to_string(path){
+                Ok(score_board) => score_board,
+                Err(err) =>{
+                        return vec![]
+                }
+        };
+        for line in score_board.lines(){
+        let skip = line.trim();
+                if skip.is_empty()||skip.starts_with('#'){
+                        continue;
+                }
+                match parse_score(line){
+                        Some(score_board) => scores.push(score_board),
+                        None => continue,
+                };
+        }
+        scores
 }
-
