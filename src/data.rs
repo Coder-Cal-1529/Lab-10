@@ -71,18 +71,22 @@ pub fn parse_ship_line(line: &str) -> Option<ShipSpec> {
 	if name.is_empty() {
         	return None;
 	}
-	let length: usize = ship[1].trim().parse().unwrap();
-	if length>MAX_SHIP||length<MIN_SHIP {
-		return None;
-	}
 	match ship[1].trim().parse::<usize>() {
         	Ok(length) => Some(ShipSpec {
         		    name: name.to_string(),
         		    length,
-       		 }),
-        	Err(_) => None,
-	}
-
+      				}),
+        	Err(_) => return None,
+	};
+let length: usize = ship[1].parse::<usize>().unwrap();
+if length>=MIN_SHIP && length<=MAX_SHIP	{
+return Some(ShipSpec{
+name: ship[0].trim().to_string(),
+length,
+})
+}else{
+return None
+}
 }
 // Task 2.
 // Read path and return every valid ship. Blank lines and lines starting with
