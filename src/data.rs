@@ -110,7 +110,7 @@ pub fn load_fleet(path: &str) -> Vec<ShipSpec> {
 		};
 	}
 	if inv_line > 0{ 
-		println!("Skipped {} invalid line(s) in {}", inv_line, path);
+		eprintln!("Skipped {} invalid line(s) in {}", inv_line, path);
 	};
 	ships
 }
