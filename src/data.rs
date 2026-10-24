@@ -63,53 +63,58 @@ pub fn sort_scores_desc(records: &mut Vec<ScoreRecord>) {
 // and a length that parses as a number from MIN_SHIP to MAX_SHIP.
 // Model it on parse_score above.
 pub fn parse_ship_line(line: &str) -> Option<ShipSpec> {
-    let ship: Vec<&str> = line.trim().split(',').collect();
-    if ship.len() != 2 {
-        return None;
-    }
-    let name = ship[0].trim();
-    if name.is_empty() {
-        return None;
-}
-let length: usize = ship[1].trim().parse().unwrap();
-if length>MAX_SHIP||length<MIN_SHIP {
-return None;
-}
-    match ship[1].trim().parse::<usize>() {
-        Ok(length) => Some(ShipSpec {
-            name: name.to_string(),
-            length,
-        }),
-        Err(_) => None,
-}
+	let ship: Vec<&str> = line.trim().split(',').collect();
+	if ship.len() != 2 {
+        	return None;
+    	}
+	let name = ship[0].trim();
+	if name.is_empty() {
+        	return None;
+	}
+	let length: usize = ship[1].trim().parse().unwrap();
+	if length>MAX_SHIP||length<MIN_SHIP {
+		return None;
+	}
+	match ship[1].trim().parse::<usize>() {
+        	Ok(length) => Some(ShipSpec {
+        		    name: name.to_string(),
+        		    length,
+       		 }),
+        	Err(_) => None,
+	}
+
 }
 // Task 2.
 // Read path and return every valid ship. Blank lines and lines starting with
 // '#' are ignored silently. Any other line parse_ship_line rejects is counted;
 // if the count is above 0, print Skipped N invalid line(s) in <path>
 // to stderr (eprintln!). If the file cannot be read, print the error to stderr and return an empty Vec.
- //pub fn load_fleet(_path: &str) -> Vec<ShipSpec> {
-//let mut valid_ships: Vec<ShipSpec>;
-//match fs::read_to_string(path){
-  //      Ok(_) => {
-  //      }
-  //     Err(_) =>{
-   //     println!("There was an error retrieving your file");
-    //   return Some();
-      //  }
-//};
-//let mut count: i32 = 0;
-  //      for line in path.lines(){
-//if lot.is_empty(){}
-  //             }if parse_ship_line(line)== None {
-   //             count += 1;
-     //           }else{
+pub fn load_fleet(path: &str) -> Vec<ShipSpec> {
+	let mut ships = Vec::new();
+	let mut inv_line: i32 = 0;
+	let fleet = match fs::read_to_string(path){
+		Ok(fleet) => fleet,
+		Err(err) =>{
+			eprintln!("Unable to read file due to Error: {}", err);
+       			return vec![]
+        	}
+	};
+	for line in fleet.lines(){
+	let skip = line.trim();
+                if skip.is_empty()||skip.starts_with('#'){
+                        continue;
+                }
+		match parse_ship_line(line){
+			Some(ship_spec) => ships.push(ship_spec),
+			None => inv_line += 1,
+		};
+	}
+	if inv_line > 0{ 
+		println!("Skipped {} invalid line(s) in {}", inv_line, path);
+	};
+	ships
+}
 
-
-       // }if count > 0{
-        //eprintln!("Skipped {} invalid line(s) in <path>",count);
-        //}
-//return Some(ShipSpec);}
      
 // Task 3.
 // Turn the text of a board file into a Board (a 2D array). The text has SI// rows of SIZE characters: '.' is water, 'S' is a ship. Blank lines and lines
@@ -117,7 +122,7 @@ return None;
 // a row of the wrong width, or any other character.
 // Start from board::new_board() and fill in board[row][col].
 pub fn parse_board(text: &str) -> Option<Board> {
-   let mut board = new_board();
+	let mut board = new_board();
 	let mut row_count: usize =0;
 	for row in text.lines(){
 		let line = row.trim();
@@ -149,7 +154,7 @@ Some(board)
 // Read the file at path and parse it with parse_board. On a read error, or if
 // parse_board returns None, print a message to stderr and return None.
 pub fn load_board(path: &str) -> Option<Board> {
-	let board_file = match std::fs::read_to_string(path) {   
+	let board_file = match fs::read_to_string(path) {   
 		Ok(board) => board,
 		Err(err) => {
 			eprintln!("File could not be read due to Error: {}", err);
@@ -181,16 +186,3 @@ pub fn load_scores(_path: &str) -> Vec<ScoreRecord> {
     todo!("Task 7: load_scores")
 }
 
-// TEMPORARY: lets the game run before load_fleet works.
-// Task 5 replaces the call in main.rs; then delete this function.
-pub fn default_fleet() -> Vec<ShipSpec> {
-    let lengths = [5, 4, 3, 3, 2];
-    let mut fleet = Vec::new();
-    for length in lengths {
-        fleet.push(ShipSpec {
-            name: format!("Ship{length}"),
-            length,
-        });
-    }
-    fleet
-}
