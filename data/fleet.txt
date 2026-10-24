@@ -7,6 +7,3 @@ Submarine,3
 Destroyer,2
 
 # added by a student who wanted a bigger navy
-Tugboat,1
-Dinghy,x
-Flagship
