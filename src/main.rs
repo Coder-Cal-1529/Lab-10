@@ -3,7 +3,7 @@ use battleship::data::{self, ShipSpec};
 use battleship::ui;
 use rand::SeedableRng;
 use rand::rngs::StdRng;
-
+use crate::data::ScoreRecord;
 const FLEET_PATH: &str = "data/fleet.txt";
 const SCORES_PATH: &str ="data/scores.txt";
 const PRACTICE_PATH: &str = "data/boards/practice.txt";
@@ -65,16 +65,27 @@ fn play_game(fleet: &[ShipSpec]) {
         println!("All ships sunk in {shots} shots. Score: {score}");
         // TODO (Task 10): if score > 0, ask for a name with ui::prompt, build a
         // ScoreRecord (add it to the `use` line), and save it with
-        // data::append_score. Print "Score saved." only when it returns true.
-    }
-}
+        // data::append_score. Print "Score saved." only when it returns true
 
+if score >0 {
+let given_name = ui::prompt("Name for the high-score list: ");
+if given_name.is_empty(){
+return
+}else{
+let mut success: bool = false;
+while success == false{
+success = data::append_score(SCORES_PATH, &ScoreRecord{
+name: given_name.clone(),
+score:  score,
+});
+}
+println!("Score Saved");
+}
+}
+}
+}
 // An unscored game on the fixed layout in the practice file.
 fn practice_game() {
-    // TODO (Task 8): load the board with data::load_board(PRACTICE_PATH). On
-    // Some(mut board), play it with play_round and print
-    // "Practice board cleared in N shots." when play_round returns Some(N).
-    // On None,
 let mut board = data::load_board(PRACTICE_PATH);
 match play_round(board.as_mut().unwrap()){
 	Some(shots) =>{
