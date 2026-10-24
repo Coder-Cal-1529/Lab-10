@@ -148,10 +148,22 @@ Some(board)
 // Task 4.
 // Read the file at path and parse it with parse_board. On a read error, or if
 // parse_board returns None, print a message to stderr and return None.
-pub fn load_board(_path: &str) -> Option<Board> {
-    todo!("Task 4: load_board")
+pub fn load_board(path: &str) -> Option<Board> {
+	let board_file = match std::fs::read_to_string(path) {   
+		Ok(board) => board,
+		Err(err) => {
+			eprintln!("File could not be read due to Error: {}", err);
+			return None;
+		}
+	};
+	match parse_board(&board_file){
+		Some(board)=> Some(board),
+		None => {
+			eprintln!("<{}> is not a valid board file", path);
+			None
+		}
+	}
 }
-
 // Task 6.
 // Append "name,score" as one line to path, creating the file if needed.
 // Replace commas in the name with spaces so the line stays parseable.
